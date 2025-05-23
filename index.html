@@ -1,52 +1,70 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>WebAR QR Code Demo</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="style.css" />
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-</head>
-<body style="margin : 0px; overflow: hidden;">
-
+  </head>
+  <body style="margin: 0px; overflow: hidden">
     <button id="openSidebarBtn" class="open-btn">&#9776; Menu</button>
 
     <div id="sidebar" class="sidebar">
-        <button id="closeSidebarBtn" class="close-btn">&times;</button>
-        <h2>Dish Menu</h2>
-        <ul>
-            <li data-dish-id="bruschetta01" 
-                data-dish-name="Artisan Bruschetta" 
-                data-model-src="assets/Bruschetta.glb" 
-                data-price="6.50" 
-                data-thumbnail="https://via.placeholder.com/60x60.png?text=Bruschetta">
-                <img src="https://via.placeholder.com/60x60.png?text=Bruschetta" alt="Artisan Bruschetta Thumbnail">
-                <div class="dish-info">
-                    <h3>Artisan Bruschetta</h3>
-                    <p>Toasted bread with fresh tomatoes, garlic, basil, and a hint of olive oil.</p>
-                </div>
-            </li>
-        </ul>
+      <button id="closeSidebarBtn" class="close-btn">&times;</button>
+      <h2>Dish Menu</h2>
+      <ul>
+        <li
+          data-dish-id="bruschetta01"
+          data-dish-name="Artisan Bruschetta"
+          data-model-src="assets/Bruschetta.glb"
+          data-price="6.50"
+          data-thumbnail="https://via.placeholder.com/60x60.png?text=Bruschetta"
+        >
+          <img
+            src="https://via.placeholder.com/60x60.png?text=Bruschetta"
+            alt="Artisan Bruschetta Thumbnail"
+          />
+          <div class="dish-info">
+            <h3>Artisan Bruschetta</h3>
+            <p>
+              Toasted bread with fresh tomatoes, garlic, basil, and a hint of
+              olive oil.
+            </p>
+          </div>
+        </li>
+      </ul>
     </div>
 
     <div id="cart-controls">
-        <button id="addToCartBtn" disabled>Add to Cart</button>
-        <div id="cartStatus">Cart: 0 items - $0.00</div>
-        <div id="cartNotification" class="cart-notification">Item added to cart!</div>
+      <button id="addToCartBtn" disabled>Add to Cart</button>
+      <div id="cartStatus">Cart: 0 items - $0.00</div>
+      <div id="cartNotification" class="cart-notification">
+        Item added to cart!
+      </div>
     </div>
 
-    <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;' raycaster="objects: .clickable" cursor="rayOrigin: mouse; fuse: false;">
-        <a-assets>
-            <!-- Assets can be preloaded here if needed. For this setup, models are loaded directly by URL. -->
-        </a-assets>
+    <a-scene
+      embedded
+      arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+      raycaster="objects: .clickable"
+      cursor="rayOrigin: mouse; fuse: false;"
+    >
+      <a-assets>
+        <!-- Assets can be preloaded here if needed. For this setup, models are loaded directly by URL. -->
+      </a-assets>
 
-        <!-- 
+      <!-- 
             Marker for the QR code (Hiro pattern).
             The model is placed as a child of the marker so its position and rotation are relative to the marker.
         -->
-        <a-marker type='pattern' url='assets/markerQR.patt'> <!-- Updated marker URL -->
-            <!-- 
+      <a-marker type="pattern" url="assets/markerQR.patt">
+        <!-- Updated marker URL -->
+        <!-- 
                 3D Model Entity:
                 - Loads the Bruschetta model by default.
                 - Positioned slightly above the marker's center.
@@ -57,25 +75,36 @@
                   'dur: 20000' means a full rotation takes 20 seconds. Adjust for speed.
                   'easing: linear' ensures constant rotation speed.
             -->
-            <a-entity 
-                id="animated-model"
-                class="clickable"
-                gltf-model="assets/Bruschetta.glb"  <!-- Updated default model -->
-                position="0 0.5 0" 
-                scale="0.01 0.01 0.01" <!-- Initial scale, adjust as needed for Bruschetta.glb -->
-                animation__autoplay="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear; startEvents: model-loaded"
-                manual-rotation>
-                <!-- This comment is for scale adjustment: -->
-                <!-- Adjust model scale (e.g., scale="0.005 0.005 0.005") based on the physical size of your QR code marker -->
-                <!-- and the intrinsic size of the model to achieve a "realistic" appearance. -->
-                <!-- A smaller physical marker might require a smaller scale value here. -->
-            </a-entity>
-            <!-- <a-box position='0 0.5 0' material='color: yellow;'></a-box> --> {/* Original box commented out */}
-        </a-marker>
+        <a-entity
+          id="animated-model"
+          class="clickable"
+          gltf-model="assets/Bruschetta.glb"
+          <!--
+          Updated
+          default
+          model
+          --
+        >
+          position="0 0.5 0" scale="0.01 0.01 0.01"
+          <!-- Initial scale, adjust as needed for Bruschetta.glb -->
+          animation__autoplay="property: rotation; to: 0 360 0; loop: true; dur:
+          20000; easing: linear; startEvents: model-loaded" manual-rotation>
+          <!-- This comment is for scale adjustment: -->
+          <!-- Adjust model scale (e.g., scale="0.005 0.005 0.005") based on the physical size of your QR code marker -->
+          <!-- and the intrinsic size of the model to achieve a "realistic" appearance. -->
+          <!-- A smaller physical marker might require a smaller scale value here. -->
+        </a-entity>
+        <!-- <a-box position='0 0.5 0' material='color: yellow;'></a-box> -->
+        {/* Original box commented out */}
+      </a-marker>
 
-        <!-- Camera entity is required for AR.js - added cursor for raycasting -->
-        <a-entity camera cursor="rayOrigin: mouse; fuse: false;" raycaster="objects: .clickable"></a-entity>
+      <!-- Camera entity is required for AR.js - added cursor for raycasting -->
+      <a-entity
+        camera
+        cursor="rayOrigin: mouse; fuse: false;"
+        raycaster="objects: .clickable"
+      ></a-entity>
     </a-scene>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
