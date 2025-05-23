@@ -1,0 +1,355 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #1a1a1a; /* Slightly softer black for body background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font stack */
+    color: #ecf0f1; /* Default light text color */
+}
+
+a-scene {
+    height: 100vh;
+    width: 100vw;
+    /* Ensure A-Frame canvas doesn't interfere with sidebar clicks */
+    position: relative; /* or absolute, depending on other layout */
+    z-index: 1; /* Default stack context */
+}
+
+/* Sidebar Styles */
+.sidebar {
+    height: 100%;
+    width: 300px; /* Fixed width, can be % */
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #2c3e50; /* Dark blue-grey */
+    color: #ecf0f1; /* Light grey/white text */
+    padding: 20px;
+    box-shadow: 3px 0 10px rgba(0,0,0,0.7); /* Slightly enhanced shadow */
+    transform: translateX(-100%); /* Initially hidden */
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother cubic-bezier, added shadow transition */
+    z-index: 1000; /* Ensure sidebar is above other content */
+    overflow-y: auto;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.sidebar.open {
+    transform: translateX(0);
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5); /* More prominent shadow when open */
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    color: #1abc9c; /* Teal accent for heading */
+    border-bottom: 1px solid #34495e; /* Slightly lighter dark shade for separator */
+    padding-bottom: 10px;
+    text-shadow: 0 0 5px rgba(26, 188, 156, 0.5); /* Subtle emissive glow for title */
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    display: flex; /* Align image and text side-by-side */
+    align-items: center; /* Vertically align items in the center */
+    padding: 12px 5px; /* Adjusted padding */
+    border-bottom: 1px solid #34495e;
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease; /* Added transform and shadow transition */
+    opacity: 0; /* For staggered animation */
+    animation: fadeInListItem 0.5s ease-out forwards;
+}
+
+/* Staggered animation for list items */
+.sidebar.open li:nth-child(1) { animation-delay: 0.1s; }
+.sidebar.open li:nth-child(2) { animation-delay: 0.2s; }
+.sidebar.open li:nth-child(3) { animation-delay: 0.3s; }
+.sidebar.open li:nth-child(4) { animation-delay: 0.4s; }
+/* Add more if more items */
+
+@keyframes fadeInListItem {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+.sidebar li:last-child {
+    border-bottom: none;
+}
+
+.sidebar li:hover {
+    background-color: #34495e; /* Slightly lighter on hover */
+    transform: translateX(5px); /* Slight lift effect */
+    box-shadow: 0 0 10px rgba(26, 188, 156, 0.3); /* Subtle glow on hover */
+}
+
+.sidebar li img {
+    width: 60px; /* Increased size */
+    height: 60px;
+    border-radius: 5px; /* Slightly rounded corners for thumbnail */
+    margin-right: 15px; /* Space between image and text */
+    object-fit: cover; /* Ensure image covers the area, might crop */
+}
+
+.sidebar .dish-info {
+    flex-grow: 1; /* Allow text content to take remaining space */
+}
+
+.sidebar .dish-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+    color: #1abc9c; /* Teal accent for dish names */
+    text-shadow: 0 0 3px rgba(26, 188, 156, 0.4); /* Subtle emissive glow */
+}
+
+.sidebar .dish-info p {
+    margin: 0;
+    font-size: 0.9em;
+    color: #bdc3c7; /* Lighter grey for description */
+    line-height: 1.4; /* Improved readability */
+}
+
+/* Button Styles */
+.open-btn, .close-btn, #addToCartBtn { /* Common button styles */
+    background-color: #1abc9c; /* Teal */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1em; /* Consistent font size */
+    border-radius: 4px; /* Slightly more rounded */
+    transition: background-color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2); /* Subtle text shadow for depth */
+}
+
+.open-btn:hover, .close-btn:hover, #addToCartBtn:hover:not(:disabled) {
+    background-color: #1dd2af; /* Lighter teal on hover */
+    box-shadow: 0 0 15px rgba(26, 188, 156, 0.6); /* Glow effect */
+    transform: translateY(-1px); /* Slight lift */
+}
+
+.open-btn:active, .close-btn:active, #addToCartBtn:active:not(:disabled) {
+    background-color: #16a085; /* Darker teal on active */
+    transform: translateY(0px) scale(0.98); /* Pressed feel */
+    box-shadow: 0 0 5px rgba(26, 188, 156, 0.4);
+}
+
+.open-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001; /* Above sidebar when closed, but can be adjusted */
+    font-size: 16px; /* Specific to this button if needed */
+}
+
+.sidebar.open + .open-btn { /* Or manage visibility with JS */
+    display: none; 
+}
+
+.close-btn {
+    position: absolute; /* Position relative to sidebar */
+    top: 10px;
+    right: 10px;
+    font-size: 24px; /* Larger for the 'times' symbol */
+    padding: 5px 10px; /* Adjust padding for symbol */
+    font-size: 24px; /* Larger for the 'times' symbol - already set */
+}
+
+/* Cart Controls Styling */
+#cart-controls {
+    position: fixed;
+    bottom: 20px; /* Position at the bottom */
+    left: 50%;
+    transform: translateX(-50%); /* Center horizontally */
+    background-color: #23313f; /* Slightly darker than sidebar for contrast */
+    padding: 12px 20px; /* Increased padding */
+    border-radius: 8px; /* More rounded */
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.5); /* Enhanced shadow */
+    z-index: 1002; /* Above sidebar toggle, below open sidebar */
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Increased space */
+    transition: bottom 0.3s ease-in-out; /* For potential future hide/show animations */
+}
+
+#addToCartBtn {
+    /* Inherits from common button styles */
+    padding: 12px 20px; /* Larger padding for primary action */
+}
+
+#addToCartBtn:disabled {
+    background-color: #566573; /* Darker grey when disabled */
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+#cartStatus {
+    color: #ecf0f1; /* Light text */
+    font-size: 1em; /* Slightly larger */
+    min-width: 160px; /* Ensure some space for the text */
+    text-align: left;
+    font-weight: 500; /* Slightly bolder */
+}
+
+/* Cart Notification Styling */
+.cart-notification {
+    position: absolute;
+    bottom: calc(100% + 10px); /* Position above the cart-controls */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1abc9c; /* Teal, matching buttons */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, transform 0.3s ease-in-out;
+    white-space: nowrap;
+    z-index: 1003; /* Above cart controls */
+}
+
+.cart-notification.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-5px); /* Slight upward movement */
+}
+
+
+/* Styling for the debug UI if enabled */
+.arjs-loader {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.arjs-loader-spinner {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+/* --- Responsive Design Adjustments --- */
+
+/* Small Smartphones (e.g., up to 480px width) */
+@media (max-width: 480px) {
+    .sidebar {
+        width: 280px; /* Slightly narrower for small screens */
+        padding: 15px; /* Reduce padding */
+    }
+
+    .sidebar h2 {
+        font-size: 1.5em; /* Adjust title size */
+    }
+
+    .sidebar li img {
+        width: 50px; /* Smaller thumbnails */
+        height: 50px;
+        margin-right: 10px;
+    }
+
+    .sidebar .dish-info h3 {
+        font-size: 1em;
+    }
+    .sidebar .dish-info p {
+        font-size: 0.8em;
+    }
+
+    .open-btn, .close-btn, #addToCartBtn {
+        padding: 12px 18px; /* Slightly larger tap targets */
+        font-size: 1.1em; /* Slightly larger font for buttons */
+    }
+    .open-btn {
+        top: 10px;
+        left: 10px;
+    }
+    .close-btn { /* Ensure close button is easily tappable */
+        top: 5px;
+        right: 5px;
+        font-size: 28px;
+    }
+
+    #cart-controls {
+        width: 95%; /* More width to prevent squishing */
+        bottom: 10px; /* Closer to bottom */
+        padding: 10px;
+        gap: 10px; /* Reduce gap */
+        flex-direction: column; /* Stack items vertically */
+        align-items: stretch; /* Stretch items to full width of control */
+    }
+
+    #addToCartBtn {
+        padding: 12px; /* Ensure good height */
+        text-align: center;
+    }
+
+    #cartStatus {
+        font-size: 0.9em;
+        text-align: center; /* Center text when stacked */
+        min-width: 0; /* Allow it to be smaller */
+    }
+    
+    .cart-notification {
+        width: 80%; /* Make notification wider */
+        font-size: 0.9em;
+        padding: 10px;
+        bottom: calc(100% + 5px); /* Adjust position due to stacked cart-controls */
+    }
+}
+
+/* Tablets (e.g., ~768px to ~1024px width) */
+@media (min-width: 481px) and (max-width: 1024px) {
+    .sidebar {
+        width: 320px; /* Slightly wider for tablets */
+    }
+
+    .sidebar h2 {
+        font-size: 1.7em;
+    }
+    
+    .sidebar li img {
+        width: 65px;
+        height: 65px;
+    }
+
+    .open-btn, .close-btn, #addToCartBtn {
+        padding: 12px 20px;
+        font-size: 1.05em;
+    }
+
+    #cart-controls {
+        padding: 15px 25px;
+        gap: 25px;
+    }
+
+    #cartStatus {
+        font-size: 1.05em;
+    }
+}

@@ -1,0 +1,18 @@
+# This file is intentionally left empty.
+# It's a common convention to use .gitkeep files to ensure that
+# otherwise empty directories are tracked by Git.
+# This 'models/' directory is intended to store 3D models for the WebAR application.
+#
+# For example, you might place .gltf, .glb, .obj, or other 3D model formats here.
+# These models can then be referenced in the A-Frame scene (index.html)
+# to be displayed in augmented reality.
+#
+# Example usage in A-Frame:
+# <a-asset-item id="my-model" src="models/my-custom-model.glb"></a-asset-item>
+# ...
+# <a-marker preset="hiro">
+#   <a-entity gltf-model="#my-model" scale="0.5 0.5 0.5"></a-entity>
+# </a-marker>
+#
+# Remove this file if you add actual models to this directory and no longer need it
+# to ensure the directory is tracked.
